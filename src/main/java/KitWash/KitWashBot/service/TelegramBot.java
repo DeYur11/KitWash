@@ -30,6 +30,12 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     final BotConfig config;
 
+    private SendMessageService sendMessageService;
+    @Autowired
+    public void setSendMessageService(SendMessageService sendMessageService) {
+        this.sendMessageService = sendMessageService;
+    }
+
     public TelegramBot(BotConfig config) {
         this.config = config;
     }
@@ -50,14 +56,16 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
-                switch (messageText) {
-                    case "/start":
-                        startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
-                        break;
 
-                    default:
-                        prepareAndSendMessage(chatId, "Sorry, command was not recognized");
-                }
+            sendMessageService.test1(update.getMessage());
+//                switch (messageText) {
+//                    case "/start":
+//                        startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
+//                        break;
+//
+//                    default:
+//                        prepareAndSendMessage(chatId, "Sorry, command was not recognized");
+//                }
         }
     }
 
