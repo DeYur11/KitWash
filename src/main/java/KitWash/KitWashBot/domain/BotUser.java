@@ -2,21 +2,23 @@ package KitWash.KitWashBot.domain;
 
 import KitWash.KitWashBot.model.Worker;
 
-public class User {
+public class BotUser {
     Position position;
     AddPosition addPosition;
+    WorkPosition workPosition;
+
     Worker worker;
     private Long id;
 
 
-    public User(Long id){
+    public BotUser(Long id){
         this.id = id;
     }
-    public User(Long id, Position position){
+    public BotUser(Long id, Position position){
         this.id = id;
         this.position = position;
     }
-    public User(){}
+    public BotUser(){}
     public AddPosition getAddPosition() {
         return addPosition;
     }
@@ -42,5 +44,13 @@ public class User {
 
     public void setWorker(Worker worker) {
         this.worker = worker;
+    }
+
+    public WorkPosition getWorkPosition() {
+        return workPosition;
+    }
+
+    public void setWorkPosition(WorkPosition workPosition) {
+        this.workPosition = workPosition;
     }
 }

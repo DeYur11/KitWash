@@ -1,9 +1,8 @@
 package KitWash.KitWashBot.handlers;
 
 import KitWash.KitWashBot.cache.Cache;
-import KitWash.KitWashBot.domain.AddPosition;
+import KitWash.KitWashBot.domain.BotUser;
 import KitWash.KitWashBot.domain.Position;
-import KitWash.KitWashBot.domain.User;
 import KitWash.KitWashBot.messageSender.MessageSender;
 import KitWash.KitWashBot.model.Database;
 import KitWash.KitWashBot.model.Worker;
@@ -14,7 +13,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import javax.xml.crypto.Data;
 import java.util.HashMap;
 
 import static KitWash.KitWashBot.domain.AddPosition.*;
@@ -23,9 +21,9 @@ import static KitWash.KitWashBot.domain.AddPosition.*;
 public class AddUserHandler {
     private final Database database;
     private final MessageSender messageSender;
-    private final Cache<User> cache;
-    private final HashMap<User, AddForm> addingUsers;
-    public AddUserHandler(MessageSender messageSender, Cache<User> cache, Database database){
+    private final Cache<BotUser> cache;
+    private final HashMap<BotUser, AddForm> addingUsers;
+    public AddUserHandler(MessageSender messageSender, Cache<BotUser> cache, Database database){
         this.messageSender = messageSender;
         this.database = database;
         this.cache = cache;
@@ -34,53 +32,53 @@ public class AddUserHandler {
 
     public void choose(Message message){
 
-        User user = cache.findBy(message.getChatId());
+        BotUser botUser = cache.findBy(message.getChatId());
 
-        if(!addingUsers.keySet().contains(user)){
-            addingUsers.put(user, new AddForm());
+        if(!addingUsers.keySet().contains(botUser)){
+            addingUsers.put(botUser, new AddForm());
         }
 
-        switch (user.getAddPosition()){
+        switch (botUser.getAddPosition()){
             case INPUT_NAME:
 
-                user.setAddPosition(INPUT_SURNAME);
-                addingUsers.get(user).setName(message.getText());
+                botUser.setAddPosition(INPUT_SURNAME);
+                addingUsers.get(botUser).setName(message.getText());
                 messageSender.sendMessage(SendMessage.builder()
                         .text("Введіть прізвище працівника")
-                        .chatId(String.valueOf(user.getId()))
+                        .chatId(String.valueOf(botUser.getId()))
                         .build());
                 break;
             case INPUT_SURNAME:
-                user.setAddPosition(INPUT_ID);
-                addingUsers.get(user).setSurname(message.getText());
+                botUser.setAddPosition(INPUT_ID);
+                addingUsers.get(botUser).setSurname(message.getText());
                 messageSender.sendMessage(SendMessage.builder()
                         .text("Введіть ID користувача")
-                        .chatId(String.valueOf(user.getId()))
+                        .chatId(String.valueOf(botUser.getId()))
                         .build());
                 break;
             case INPUT_ID:
-                user.setPosition(Position.HOME_PAGE);
-                addingUsers.get(user).setId(Long.parseLong(message.getText()));
+                botUser.setPosition(Position.HOME_PAGE);
+                addingUsers.get(botUser).setId(Long.parseLong(message.getText()));
                 messageSender.sendMessage(SendMessage.builder()
                         .text("Працівник успішно доданий")
-                        .chatId(String.valueOf(user.getId()))
+                        .chatId(String.valueOf(botUser.getId()))
                         .build());
 
-                user.setWorker(new Worker(
-                        addingUsers.get(user).getName(),
-                        addingUsers.get(user).getSurname(),
-                        addingUsers.get(user).getId()
+                botUser.setWorker(new Worker(
+                        addingUsers.get(botUser).getName(),
+                        addingUsers.get(botUser).getSurname(),
+                        addingUsers.get(botUser).getId()
                 ));
                 try {
-                    database.addWorker(user.getWorker());
+                    database.addWorker(botUser.getWorker());
                 }catch (Exception e){
                     e.printStackTrace();
                 }
                 System.out.println(database.getWorkers());
-                cache.add(new User(addingUsers.get(user).getId(), Position.HOME_PAGE));
+                cache.add(new BotUser(addingUsers.get(botUser).getId(), Position.HOME_PAGE));
                 messageSender.sendMessage(SendMessage.builder()
-                        .text("You are added\n")
-                        .chatId(addingUsers.get(user).getId())
+                        .text("Ви додані\n")
+                        .chatId(addingUsers.get(botUser).getId())
                         .replyMarkup(ReplyKeyboardMarkup.builder()
                                 .oneTimeKeyboard(true)
                                 .resizeKeyboard(true)

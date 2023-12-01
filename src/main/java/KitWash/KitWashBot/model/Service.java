@@ -16,7 +16,6 @@ public class Service {
     * Puts different prices to services type.
     * */
     static {
-
         priceList.put(ServiceType.BODYWASH, 250);
         priceList.put(ServiceType.INTERIORBODYWASH, 350);
         priceList.put(ServiceType.DRYCLEANING, 1800);
@@ -47,6 +46,14 @@ public class Service {
 
     public int getPrice(){
         return Service.priceList.get(this.serviceType);
+    }
+
+    public ServiceType getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(ServiceType serviceType) {
+        this.serviceType = serviceType;
     }
 
     public boolean isInDateRange(Service toComp){
