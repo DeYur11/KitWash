@@ -1,8 +1,10 @@
 package KitWash.KitWashBot.model;
 
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.Vector;
-
+@Component
 public class Database {
     private final Vector<Service> totalServices = new Vector<>();
     private final Vector<Worker> workers = new Vector<>();
@@ -13,6 +15,7 @@ public class Database {
         }
         workers.add(worker);
     }
+
     public void addService(Service service){
         for(var i: workers){
             if(service.workers.contains(i)){

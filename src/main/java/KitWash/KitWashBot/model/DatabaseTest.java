@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
 public class DatabaseTest {
     public static void main(String[] args){
         Database db = new Database();
-        Worker worker = new Worker("Yura", "Debelyak", 9999);
+        Worker worker = new Worker("Yura", "Debelyak", 9999L);
 
         Service service = new Service();
         Service service2 = new Service();

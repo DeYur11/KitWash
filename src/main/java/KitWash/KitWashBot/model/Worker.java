@@ -6,11 +6,10 @@ import java.util.HashMap;
 public class Worker {
     String name;
     String surname;
-    int telegramId;
-    //ArrayList<Service> completedServices;
+    Long telegramId;
     ArrayList<Service> completedServices;
 
-    public Worker(String name, String surname, int telegramId) {
+    public Worker(String name, String surname, Long telegramId) {
         this.name = name;
         this.surname = surname;
         this.telegramId = telegramId;

@@ -2,6 +2,7 @@ package KitWash.KitWashBot.service;
 
 
 import KitWash.KitWashBot.config.BotConfig;
+import KitWash.KitWashBot.handlers.MessageHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -31,9 +32,16 @@ public class TelegramBot extends TelegramLongPollingBot {
     final BotConfig config;
 
     private SendMessageService sendMessageService;
+    private MessageHandler messageHandler;
+
     @Autowired
     public void setSendMessageService(SendMessageService sendMessageService) {
         this.sendMessageService = sendMessageService;
+    }
+
+    @Autowired
+    public void setMessageHandler(MessageHandler messageHandler) {
+        this.messageHandler = messageHandler;
     }
 
     public TelegramBot(BotConfig config) {
@@ -57,7 +65,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
 
-            sendMessageService.test1(update.getMessage());
+            messageHandler.choose(update.getMessage());
 //                switch (messageText) {
 //                    case "/start":
 //                        startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
