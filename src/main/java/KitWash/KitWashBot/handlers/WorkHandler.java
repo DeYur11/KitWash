@@ -16,6 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 @Component
@@ -38,6 +39,13 @@ public class WorkHandler {
             case "Мийка кузова і салону" -> serviceHashMap.get(botUser).setServiceType(ServiceType.INTERIORBODYWASH);
             case "Хімчистка" -> serviceHashMap.get(botUser).setServiceType(ServiceType.DRYCLEANING);
         }
+        serviceHashMap.get(botUser).setStartDate(LocalDateTime.now());
+        try {
+            database.addWorker(database.getWorkers().stream().filter(worker -> botUser.getId().equals(worker.getTelegramId())).findAny().orElse(null));
+        }catch (Exception e){
+            e.printStackTrace();
+            return;
+        }
         messageSender.sendMessage(SendMessage.builder()
                 .text("Послуга розпочата")
                 .chatId(String.valueOf(botUser.getId()))
@@ -57,7 +65,7 @@ public class WorkHandler {
                 .text("Послуга завершена")
                 .chatId(String.valueOf(botUser.getId()))
                 .build());
-
+        serviceHashMap.get(botUser).setEndDate(LocalDateTime.now());
         MessageHandler.menuMessage(messageSender, message);
         database.addService(serviceHashMap.get(botUser));
         System.out.println(database.getTotalServices());
