@@ -2,60 +2,45 @@ package KitWash.KitWashBot.service;
 
 
 import KitWash.KitWashBot.config.BotConfig;
-import KitWash.KitWashBot.handlers.MessageHandler;
+import KitWash.KitWashBot.handlers.UserInputHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
-
     final BotConfig config;
-
     private SendMessageService sendMessageService;
-    private MessageHandler messageHandler;
+    private UserInputHandler userInputHandler;
 
-    @Autowired
-    public void setSendMessageService(SendMessageService sendMessageService) {
-        this.sendMessageService = sendMessageService;
-    }
-
-    @Autowired
-    public void setMessageHandler(MessageHandler messageHandler) {
-        this.messageHandler = messageHandler;
-    }
-
+    //конструктор класу TelegramBot
     public TelegramBot(BotConfig config) {
         this.config = config;
     }
 
+    //геттери класу TelegramBot
     @Override
     public String getBotUsername() {
         return config.getBotName();
     }
-
     @Override
     public String getBotToken() {
         return config.getToken();
+    }
+
+    //сеттери класу TelegramBot
+    @Autowired
+    public void setSendMessageService(SendMessageService sendMessageService) {
+        this.sendMessageService = sendMessageService;
+    }
+    @Autowired
+    public void setMessageHandler(UserInputHandler userInputHandler) {
+        this.userInputHandler = userInputHandler;
     }
 
     @Override
@@ -65,7 +50,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
 
-            messageHandler.choose(update.getMessage());
+            userInputHandler.choose(update.getMessage());
 //                switch (messageText) {
 //                    case "/start":
 //                        startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
@@ -92,8 +77,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         executeMessage(message);
     }
 
-
-
     private void executeMessage(SendMessage message){
         try {
             execute(message);
@@ -101,7 +84,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
-
     private void prepareAndSendMessage(long chatId, String textToSend){
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));

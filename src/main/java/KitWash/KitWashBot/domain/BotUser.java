@@ -3,54 +3,48 @@ package KitWash.KitWashBot.domain;
 import KitWash.KitWashBot.model.Worker;
 
 public class BotUser {
-    Position position;
-    AddPosition addPosition;
-    WorkPosition workPosition;
-
+    GeneralStatus generalStatus;
+    InputStatus inputStatus;
+    WorkStatus workStatus;
     Worker worker;
     private Long id;
 
-
+    //конструктори класу BotUser
     public BotUser(Long id){
         this.id = id;
     }
-    public BotUser(Long id, Position position){
+    public BotUser(Long id, GeneralStatus generalStatus){
         this.id = id;
-        this.position = position;
+        this.generalStatus = generalStatus;
     }
     public BotUser(){}
-    public AddPosition getAddPosition() {
-        return addPosition;
-    }
 
-    public void setAddPosition(AddPosition addPosition) {
-        this.addPosition = addPosition;
+    //геттери класу BotUser
+    public InputStatus getInputStatus() {
+        return inputStatus;
     }
-
-    public Position getPosition() {
-        return position;
+    public GeneralStatus getGeneralStatus() {
+        return generalStatus;
     }
-
-    public Long getId() {
-        return id;
-    }
-    public void setPosition(Position position){
-        this.position = position;
-    }
-
+    public WorkStatus getWorkStatus() {return workStatus;}
     public Worker getWorker() {
         return worker;
     }
+    public Long getId() {
+        return id;
+    }
 
+    //сеттери класу BotUser
+    public void setInputStatus(InputStatus inputStatus) {
+        this.inputStatus = inputStatus;
+    }
+    public void setGeneralStatus(GeneralStatus generalStatus){
+        this.generalStatus = generalStatus;
+    }
+    public void setWorkStatus(WorkStatus workStatus) {
+        this.workStatus = workStatus;
+    }
     public void setWorker(Worker worker) {
         this.worker = worker;
-    }
-
-    public WorkPosition getWorkPosition() {
-        return workPosition;
-    }
-
-    public void setWorkPosition(WorkPosition workPosition) {
-        this.workPosition = workPosition;
     }
 }
