@@ -2,6 +2,7 @@ package KitWash.KitWashBot.handlers;
 
 import KitWash.KitWashBot.cache.Cache;
 import KitWash.KitWashBot.domain.BotUser;
+import KitWash.KitWashBot.domain.Position;
 import KitWash.KitWashBot.domain.WorkPosition;
 import KitWash.KitWashBot.messageSender.MessageSender;
 import KitWash.KitWashBot.model.Database;
@@ -41,8 +42,8 @@ public class WorkHandler {
         }
         serviceHashMap.get(botUser).setStartDate(LocalDateTime.now());
         try {
-            database.addWorker(database.getWorkers().stream().filter(worker -> botUser.getId().equals(worker.getTelegramId())).findAny().orElse(null));
-        }catch (Exception e){
+            serviceHashMap.get(botUser).addWorker(database.getWorkers().stream().filter(worker -> botUser.getId().equals(worker.getTelegramId())).findAny().orElse(null));
+            }catch (Exception e){
             e.printStackTrace();
             return;
         }
@@ -66,6 +67,7 @@ public class WorkHandler {
                 .chatId(String.valueOf(botUser.getId()))
                 .build());
         serviceHashMap.get(botUser).setEndDate(LocalDateTime.now());
+        botUser.setPosition(Position.HOME_PAGE);
         MessageHandler.menuMessage(messageSender, message);
         database.addService(serviceHashMap.get(botUser));
         System.out.println(database.getTotalServices());
