@@ -14,6 +14,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
+import java.util.Vector;
+
 @Component
 public class UserInputHandler {
     private final MessageSender messageSender;
@@ -81,6 +83,25 @@ public class UserInputHandler {
                                             }}).build())
                                     .build());
                             break;
+                        case "Список працівників":
+                            botUser.setGeneralStatus(GeneralStatus.WORKING_LIST);
+                            Vector workers = database.getWorkers();
+                            String MessageBody= "";
+                            if (workers.size() != 0) {
+
+                                MessageBody = "Список працівників:\n";
+                                for (int i = 0; i < workers.size(); i++) {
+                                    MessageBody.concat((i + 1) + ". " + workers.get(i).toString());
+                                }
+                            }
+                            else{
+                                MessageBody = "Список працівників пустий\n";
+                            }
+                            messageSender.sendMessage(SendMessage.builder()
+                                    .text(MessageBody)
+                                    .chatId(String.valueOf(botUser.getId()))
+                                    .build());
+                            break;
                     }
                     break;
                 case ADDING:
@@ -117,6 +138,9 @@ public class UserInputHandler {
                                             .build());
                                     add(KeyboardButton.builder().
                                             text("Розпочати послугу")
+                                            .build());
+                                    add(KeyboardButton.builder().
+                                            text("Список працівників")
                                             .build());
                                 }}).build())
                         .build()

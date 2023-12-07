@@ -58,9 +58,6 @@ public class Worker {
     //перетворення інформації про робітника у String
     @Override
     public String toString() {
-        return "Worker{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", telegramId=" + telegramId;
+        return "Worker " + surname + ' ' + name  + " telegramId=" + telegramId;
     }
 }
