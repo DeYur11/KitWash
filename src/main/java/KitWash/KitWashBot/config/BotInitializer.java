@@ -1,5 +1,6 @@
 package KitWash.KitWashBot.config;
 
+import KitWash.KitWashBot.model.Service;
 import KitWash.KitWashBot.service.TelegramBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -11,12 +12,13 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 @Component
 public class BotInitializer {
-
     @Autowired
     TelegramBot bot;
-
     @EventListener({ContextRefreshedEvent.class})
     public void init() throws TelegramApiException {
+
+
+
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
         try {
             telegramBotsApi.registerBot(bot);
