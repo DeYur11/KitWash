@@ -7,6 +7,7 @@ import KitWash.KitWashBot.domain.GeneralStatus;
 import KitWash.KitWashBot.domain.WorkStatus;
 import KitWash.KitWashBot.messageSender.MessageSender;
 import KitWash.KitWashBot.model.Database;
+import KitWash.KitWashBot.model.Worker;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -84,14 +85,14 @@ public class UserInputHandler {
                                     .build());
                             break;
                         case "Список працівників":
-                            botUser.setGeneralStatus(GeneralStatus.WORKING_LIST);
-                            Vector workers = database.getWorkers();
+
+                            Vector<Worker> workers = database.getWorkers();
                             String MessageBody= "";
                             if (workers.size() != 0) {
 
                                 MessageBody = "Список працівників:\n";
                                 for (int i = 0; i < workers.size(); i++) {
-                                    MessageBody.concat((i + 1) + ". " + workers.get(i).toString());
+                                    MessageBody  = MessageBody.concat((i + 1) + ". " + workers.get(i).outString());
                                 }
                             }
                             else{
@@ -101,6 +102,7 @@ public class UserInputHandler {
                                     .text(MessageBody)
                                     .chatId(String.valueOf(botUser.getId()))
                                     .build());
+                            UserInputHandler.menuMessage(messageSender, message);
                             break;
                     }
                     break;

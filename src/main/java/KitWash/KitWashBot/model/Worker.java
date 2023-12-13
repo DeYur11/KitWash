@@ -60,4 +60,7 @@ public class Worker {
     public String toString() {
         return "Worker " + surname + ' ' + name  + " telegramId=" + telegramId;
     }
+    public String outString(){
+        return surname + ' ' + name + ' ' + "Телеграм ID: " + telegramId + '\n';
+    }
 }
