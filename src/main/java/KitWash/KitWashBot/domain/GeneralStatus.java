@@ -1,9 +1,9 @@
 package KitWash.KitWashBot.domain;
 
 public enum GeneralStatus {
+    START_PAGE,
+    HOME_PAGE,
     ADDING,
     WORKING,
-    HOME_PAGE,
-    EDITING_WORKERS,
-    NONE
+    EDITING_WORKERS
 }
