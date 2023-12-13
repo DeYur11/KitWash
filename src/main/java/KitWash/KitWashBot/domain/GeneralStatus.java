@@ -5,5 +5,6 @@ public enum GeneralStatus {
     WORKING,
     HOME_PAGE,
     EDITING_WORKERS,
+    MANAGING_WORKERS,
     NONE
 }

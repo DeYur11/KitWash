@@ -1,7 +1,6 @@
 package KitWash.KitWashBot.handlers;
 
 import KitWash.KitWashBot.cache.Cache;
-import KitWash.KitWashBot.domain.InputStatus;
 import KitWash.KitWashBot.domain.BotUser;
 import KitWash.KitWashBot.domain.GeneralStatus;
 import KitWash.KitWashBot.domain.WorkStatus;
@@ -21,14 +20,16 @@ public class UserInputHandler {
     private final AdminInputHandler adminInputHandler;
     private final ServiceInputHandler serviceInputHandler;
     private final Database database;
+    private final ManageWorkerHandler manageWorkerHandler;
 
     //конструктор класу UserInputHandler
-    public UserInputHandler(MessageSender messageSender, Database database, AdminInputHandler adminInputHandler, Cache<BotUser> cache, ServiceInputHandler serviceInputHandler){
+    public UserInputHandler(MessageSender messageSender, Database database, AdminInputHandler adminInputHandler, Cache<BotUser> cache, ServiceInputHandler serviceInputHandler, EditWorkerHandler editWorkerHandler, ManageWorkerHandler manageWorkerHandler){
         this.messageSender = messageSender;
         this.database = database;
         this.cache = cache;
         this.adminInputHandler = adminInputHandler;
         this.serviceInputHandler = serviceInputHandler;
+        this.manageWorkerHandler = manageWorkerHandler;
 
         BotUser Yura = new BotUser(708874243L);
         Yura.setGeneralStatus(GeneralStatus.HOME_PAGE);
@@ -57,8 +58,7 @@ public class UserInputHandler {
                             startServiceMenuMessage(messageSender, message);
                             break;
                         case "Управління працівниками":
-                            botUser.setGeneralStatus(GeneralStatus.ADDING);
-                            botUser.setInputStatus(InputStatus.INPUT_NAME);
+                            botUser.setGeneralStatus(GeneralStatus.MANAGING_WORKERS);
                             workerMenuMessage(messageSender, message);
                             break;
                         case "Управління послугами":
@@ -71,6 +71,9 @@ public class UserInputHandler {
                     break;
                 case WORKING:
                     serviceInputHandler.choose(message);
+                    break;
+                case MANAGING_WORKERS:
+                    manageWorkerHandler.generalHandler(message);
                     break;
             }
 
