@@ -6,18 +6,32 @@ public class BotUser {
     GeneralStatus generalStatus;
     InputStatus inputStatus;
     WorkStatus workStatus;
+    WorkerEditStatus workerEditStatus;
     Worker worker;
-    private Long id;
+    private Long telegramID;
 
     //конструктори класу BotUser
-    public BotUser(Long id){
-        this.id = id;
+    public BotUser(Long telegramID){
+        this.telegramID = telegramID;
     }
-    public BotUser(Long id, GeneralStatus generalStatus){
-        this.id = id;
+    public BotUser(Long telegramID, GeneralStatus generalStatus){
+        this.telegramID = telegramID;
         this.generalStatus = generalStatus;
     }
     public BotUser(){}
+
+
+    public WorkerEditStatus getWorkerEditStatus() {
+        return workerEditStatus;
+    }
+
+    public void setWorkerEditStatus(WorkerEditStatus workerEditStatus) {
+        this.workerEditStatus = workerEditStatus;
+    }
+
+    public void setTelegramID(Long telegramID) {
+        this.telegramID = telegramID;
+    }
 
     //геттери класу BotUser
     public InputStatus getInputStatus() {
@@ -30,8 +44,8 @@ public class BotUser {
     public Worker getWorker() {
         return worker;
     }
-    public Long getId() {
-        return id;
+    public Long getTelegramID() {
+        return telegramID;
     }
 
     //сеттери класу BotUser
@@ -47,4 +61,5 @@ public class BotUser {
     public void setWorker(Worker worker) {
         this.worker = worker;
     }
+
 }

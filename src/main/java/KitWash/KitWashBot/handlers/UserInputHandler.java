@@ -59,7 +59,7 @@ public class UserInputHandler {
                             botUser.setInputStatus(InputStatus.INPUT_NAME);
                             messageSender.sendMessage(SendMessage.builder()
                                     .text("Введіть ім'я працівника")
-                                    .chatId(String.valueOf(botUser.getId()))
+                                    .chatId(String.valueOf(botUser.getTelegramID()))
                                     .build());
                             break;
                         case "Розпочати послугу":
@@ -67,7 +67,7 @@ public class UserInputHandler {
                             botUser.setWorkStatus(WorkStatus.INPUT_CATEGORY);
                             messageSender.sendMessage(SendMessage.builder()
                                     .text("Виберіть послугу, яку надаєте:")
-                                    .chatId(String.valueOf(botUser.getId()))
+                                    .chatId(String.valueOf(botUser.getTelegramID()))
                                     .replyMarkup(ReplyKeyboardMarkup.builder()
                                             .oneTimeKeyboard(true)
                                             .resizeKeyboard(true)
@@ -100,7 +100,7 @@ public class UserInputHandler {
                             }
                             messageSender.sendMessage(SendMessage.builder()
                                     .text(MessageBody)
-                                    .chatId(String.valueOf(botUser.getId()))
+                                    .chatId(String.valueOf(botUser.getTelegramID()))
                                     .build());
                             UserInputHandler.menuMessage(messageSender, message);
                             break;

@@ -18,14 +18,14 @@ public class UserCache implements Cache<BotUser> {
 
     @Override
     public void add(BotUser botUser) {
-        if (botUser.getId() != null) {
-            users.put(botUser.getId(), botUser);
+        if (botUser.getTelegramID() != null) {
+            users.put(botUser.getTelegramID(), botUser);
         }
     }
 
     @Override
     public void remove(BotUser botUser) {
-        users.remove(botUser.getId());
+        users.remove(botUser.getTelegramID());
     }
 
     @Override

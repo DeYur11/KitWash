@@ -48,7 +48,7 @@ public class AdminInputHandler {
                 addingUsers.get(botUser).setName(message.getText());
                 messageSender.sendMessage(SendMessage.builder()
                         .text("Введіть прізвище працівника")
-                        .chatId(String.valueOf(botUser.getId()))
+                        .chatId(String.valueOf(botUser.getTelegramID()))
                         .build());
                 break;
             case INPUT_SURNAME:
@@ -56,7 +56,7 @@ public class AdminInputHandler {
                 addingUsers.get(botUser).setSurname(message.getText());
                 messageSender.sendMessage(SendMessage.builder()
                         .text("Введіть ID користувача")
-                        .chatId(String.valueOf(botUser.getId()))
+                        .chatId(String.valueOf(botUser.getTelegramID()))
                         .build());
                 break;
             case INPUT_ID:
@@ -64,7 +64,7 @@ public class AdminInputHandler {
                 addingUsers.get(botUser).setId(Long.parseLong(message.getText()));
                 messageSender.sendMessage(SendMessage.builder()
                         .text("Працівник успішно доданий")
-                        .chatId(String.valueOf(botUser.getId()))
+                        .chatId(String.valueOf(botUser.getTelegramID()))
                         .build());
 
                 botUser.setWorker(new Worker(

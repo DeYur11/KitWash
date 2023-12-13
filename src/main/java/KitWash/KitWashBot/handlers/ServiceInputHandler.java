@@ -57,14 +57,14 @@ public class ServiceInputHandler {
         }
         serviceHashMap.get(botUser).setStartDate(LocalDateTime.now());
         try {
-            serviceHashMap.get(botUser).addWorker(database.getWorkers().stream().filter(worker -> botUser.getId().equals(worker.getTelegramId())).findAny().orElse(null));
+            serviceHashMap.get(botUser).addWorker(database.getWorkers().stream().filter(worker -> botUser.getTelegramID().equals(worker.getTelegramId())).findAny().orElse(null));
             }catch (Exception e){
             e.printStackTrace();
             return;
         }
         messageSender.sendMessage(SendMessage.builder()
                 .text("Послуга розпочата")
-                .chatId(String.valueOf(botUser.getId()))
+                .chatId(String.valueOf(botUser.getTelegramID()))
                 .replyMarkup(ReplyKeyboardMarkup.builder()
                         .oneTimeKeyboard(true)
                         .resizeKeyboard(true)
@@ -81,7 +81,7 @@ public class ServiceInputHandler {
     private void endWork(Message message, BotUser botUser){
         messageSender.sendMessage(SendMessage.builder()
                 .text("Послуга завершена")
-                .chatId(String.valueOf(botUser.getId()))
+                .chatId(String.valueOf(botUser.getTelegramID()))
                 .build());
         serviceHashMap.get(botUser).setEndDate(LocalDateTime.now());
         botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
