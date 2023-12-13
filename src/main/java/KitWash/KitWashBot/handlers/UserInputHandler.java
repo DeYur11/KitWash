@@ -3,6 +3,7 @@ package KitWash.KitWashBot.handlers;
 import KitWash.KitWashBot.cache.Cache;
 import KitWash.KitWashBot.domain.BotUser;
 import KitWash.KitWashBot.domain.GeneralStatus;
+import KitWash.KitWashBot.domain.ManageStatus;
 import KitWash.KitWashBot.domain.WorkStatus;
 import KitWash.KitWashBot.messageSender.MessageSender;
 import KitWash.KitWashBot.model.Database;
@@ -17,7 +18,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 public class UserInputHandler {
     private final MessageSender messageSender;
     private final Cache<BotUser> cache;
-    private final AdminInputHandler adminInputHandler;
+
     private final ServiceInputHandler serviceInputHandler;
     private final Database database;
     private final ManageWorkerHandler manageWorkerHandler;
@@ -27,7 +28,6 @@ public class UserInputHandler {
         this.messageSender = messageSender;
         this.database = database;
         this.cache = cache;
-        this.adminInputHandler = adminInputHandler;
         this.serviceInputHandler = serviceInputHandler;
         this.manageWorkerHandler = manageWorkerHandler;
 
@@ -65,9 +65,6 @@ public class UserInputHandler {
                             serviceMenuMessage(messageSender, message);
                             break;
                     }
-                    break;
-                case ADDING:
-                    adminInputHandler.choose(message);
                     break;
                 case WORKING:
                     serviceInputHandler.choose(message);
@@ -115,7 +112,10 @@ public class UserInputHandler {
         );
     }
 
-    public static void workerMenuMessage(MessageSender messageSender, Message message){
+    public void workerMenuMessage(MessageSender messageSender, Message message){
+        BotUser botUser = cache.findBy(message.getChatId());
+        botUser.setManageStatus(ManageStatus.NONE);
+
         messageSender.sendMessage(
                 SendMessage.builder()
                         .text("Редагування працівників")
@@ -210,7 +210,4 @@ public class UserInputHandler {
                         .build())
                 .build());
     }
-
-
-
 }

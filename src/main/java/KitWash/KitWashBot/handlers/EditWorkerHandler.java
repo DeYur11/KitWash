@@ -79,7 +79,7 @@ public class EditWorkerHandler {
         BotUser botUser = cache.findBy(message.getChatId());
         int index = Integer.parseInt(message.getText());
         try {
-            botUser.setWorker(database.getWorkers().elementAt(index));
+            botUser.setWorker(database.getWorkers().elementAt(index-1));
         }catch (IndexOutOfBoundsException e){
 
             messageSender.sendMessage(SendMessage.builder()
@@ -88,6 +88,7 @@ public class EditWorkerHandler {
                     .build());
             botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
             UserInputHandler.mainMenuMessage(messageSender, message);
+            return;
         }
 
         messageSender.sendMessage(SendMessage.builder()

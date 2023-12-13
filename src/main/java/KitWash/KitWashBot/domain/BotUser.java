@@ -1,5 +1,6 @@
 package KitWash.KitWashBot.domain;
 
+import KitWash.KitWashBot.handlers.ManageWorkerHandler;
 import KitWash.KitWashBot.model.Worker;
 
 public class BotUser {
@@ -7,6 +8,7 @@ public class BotUser {
     InputStatus inputStatus;
     WorkStatus workStatus;
     WorkerEditStatus workerEditStatus;
+    ManageStatus manageStatus;
     Worker worker;
     private Long telegramID;
 
@@ -20,6 +22,13 @@ public class BotUser {
     }
     public BotUser(){}
 
+    public ManageStatus getManageStatus() {
+        return manageStatus;
+    }
+
+    public void setManageStatus(ManageStatus manageStatus) {
+        this.manageStatus = manageStatus;
+    }
 
     public WorkerEditStatus getWorkerEditStatus() {
         return workerEditStatus;
