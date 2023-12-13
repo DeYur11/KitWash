@@ -7,15 +7,12 @@ import KitWash.KitWashBot.domain.GeneralStatus;
 import KitWash.KitWashBot.domain.WorkStatus;
 import KitWash.KitWashBot.messageSender.MessageSender;
 import KitWash.KitWashBot.model.Database;
-import KitWash.KitWashBot.model.Worker;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-
-import java.util.Vector;
 
 @Component
 public class UserInputHandler {
@@ -49,60 +46,23 @@ public class UserInputHandler {
             switch (botUser.getGeneralStatus()){
                 case HOME_PAGE:
                     String text = message.getText();
-                    UserInputHandler.menuMessage(messageSender, message);
+                    mainMenuMessage(messageSender, message);
                     botUser.setGeneralStatus(GeneralStatus.NONE);
                     break;
                 case NONE:
                     switch (message.getText()){
-                        case "Додати працівника":
-                            botUser.setGeneralStatus(GeneralStatus.ADDING);
-                            botUser.setInputStatus(InputStatus.INPUT_NAME);
-                            messageSender.sendMessage(SendMessage.builder()
-                                    .text("Введіть ім'я працівника")
-                                    .chatId(String.valueOf(botUser.getTelegramID()))
-                                    .build());
-                            break;
                         case "Розпочати послугу":
                             botUser.setGeneralStatus(GeneralStatus.WORKING);
                             botUser.setWorkStatus(WorkStatus.INPUT_CATEGORY);
-                            messageSender.sendMessage(SendMessage.builder()
-                                    .text("Виберіть послугу, яку надаєте:")
-                                    .chatId(String.valueOf(botUser.getTelegramID()))
-                                    .replyMarkup(ReplyKeyboardMarkup.builder()
-                                            .oneTimeKeyboard(true)
-                                            .resizeKeyboard(true)
-                                            .keyboardRow(new KeyboardRow() {{
-                                                add(KeyboardButton.builder()
-                                                        .text("Мийка кузова")
-                                                        .build());
-                                                add(KeyboardButton.builder()
-                                                        .text("Мийка кузова і салону")
-                                                        .build());
-                                                add(KeyboardButton.builder()
-                                                        .text("Хімчистка")
-                                                        .build());
-                                            }}).build())
-                                    .build());
+                            startServiceMenuMessage(messageSender, message);
                             break;
-                        case "Список працівників":
-
-                            Vector<Worker> workers = database.getWorkers();
-                            String MessageBody= "";
-                            if (workers.size() != 0) {
-
-                                MessageBody = "Список працівників:\n";
-                                for (int i = 0; i < workers.size(); i++) {
-                                    MessageBody  = MessageBody.concat((i + 1) + ". " + workers.get(i).outString());
-                                }
-                            }
-                            else{
-                                MessageBody = "Список працівників пустий\n";
-                            }
-                            messageSender.sendMessage(SendMessage.builder()
-                                    .text(MessageBody)
-                                    .chatId(String.valueOf(botUser.getTelegramID()))
-                                    .build());
-                            UserInputHandler.menuMessage(messageSender, message);
+                        case "Управління працівниками":
+                            botUser.setGeneralStatus(GeneralStatus.ADDING);
+                            botUser.setInputStatus(InputStatus.INPUT_NAME);
+                            workerMenuMessage(messageSender, message);
+                            break;
+                        case "Управління послугами":
+                            serviceMenuMessage(messageSender, message);
                             break;
                     }
                     break;
@@ -126,7 +86,7 @@ public class UserInputHandler {
     }
 
     //функція побудови інтерактивного меню користувача
-    public static void menuMessage(MessageSender messageSender, Message message){
+    public static void mainMenuMessage(MessageSender messageSender, Message message){
         messageSender.sendMessage(
                 SendMessage.builder()
                         .text("Головна сторінка")
@@ -136,17 +96,118 @@ public class UserInputHandler {
                                 .resizeKeyboard(true)
                                 .keyboardRow(new KeyboardRow() {{
                                     add(KeyboardButton.builder()
-                                            .text("Додати працівника")
+                                            .text("Розпочати послугу")
                                             .build());
-                                    add(KeyboardButton.builder().
-                                            text("Розпочати послугу")
+                                }})
+                                .keyboardRow(new KeyboardRow(){{
+                                    add(KeyboardButton.builder()
+                                            .text("Управління послугами")
                                             .build());
-                                    add(KeyboardButton.builder().
-                                            text("Список працівників")
+                                    add(KeyboardButton.builder()
+                                            .text("Управління працівниками")
                                             .build());
-                                }}).build())
+                                }})
+                                .build())
                         .build()
         );
     }
+
+    public static void workerMenuMessage(MessageSender messageSender, Message message){
+        messageSender.sendMessage(
+                SendMessage.builder()
+                        .text("Редагування працівників")
+                        .chatId(String.valueOf(message.getChatId()))
+                        .replyMarkup(ReplyKeyboardMarkup.builder()
+                                .oneTimeKeyboard(true)
+                                .resizeKeyboard(true)
+                                .keyboardRow(new KeyboardRow(){{
+                                    add(KeyboardButton.builder()
+                                            .text("Список працівників")
+                                            .build());
+                                }})
+                                .keyboardRow(new KeyboardRow() {{
+                                    add(KeyboardButton.builder()
+                                            .text("Додати працівника")
+                                            .build());
+                                    add(KeyboardButton.builder()
+                                            .text("Редагувати працівника")
+                                            .build());
+                                    add(KeyboardButton.builder()
+                                            .text("Видалити працівника")
+                                            .build());
+                                }})
+                                .keyboardRow(new KeyboardRow(){{
+                                    add(KeyboardButton.builder()
+                                            .text("На головну")
+                                            .build());
+
+                                }})
+
+                                .build())
+                        .build()
+        );
+    }
+
+    public static void serviceMenuMessage(MessageSender messageSender, Message message){
+        messageSender.sendMessage(
+                SendMessage.builder()
+                        .text("Редагування послуг")
+                        .chatId(String.valueOf(message.getChatId()))
+                        .replyMarkup(ReplyKeyboardMarkup.builder()
+                                .oneTimeKeyboard(true)
+                                .resizeKeyboard(true)
+                                .keyboardRow(new KeyboardRow(){{
+                                    add(KeyboardButton.builder()
+                                            .text("Список послуг")
+                                            .build());
+                                }})
+                                .keyboardRow(new KeyboardRow() {{
+                                    add(KeyboardButton.builder()
+                                            .text("Редагувати послугу")
+                                            .build());
+                                    add(KeyboardButton.builder()
+                                            .text("Видалити послугу")
+                                            .build());
+                                }})
+                                .keyboardRow(new KeyboardRow(){{
+                                    add(KeyboardButton.builder()
+                                            .text("На головну")
+                                            .build());
+
+                                }})
+                                .build())
+                        .build()
+        );
+    }
+
+    public static void startServiceMenuMessage(MessageSender messageSender, Message message){
+        messageSender.sendMessage(SendMessage.builder()
+                .text("Виберіть послугу, яку надаєте:")
+                .chatId(String.valueOf(message.getChatId()))
+                .replyMarkup(ReplyKeyboardMarkup.builder()
+                        .oneTimeKeyboard(true)
+                        .resizeKeyboard(true)
+                        .keyboardRow(new KeyboardRow() {{
+                            add(KeyboardButton.builder()
+                                    .text("Мийка кузова")
+                                    .build());
+                            add(KeyboardButton.builder()
+                                    .text("Мийка кузова і салону")
+                                    .build());
+                            add(KeyboardButton.builder()
+                                    .text("Хімчистка")
+                                    .build());
+                        }})
+                        .keyboardRow(new KeyboardRow(){{
+                            add(KeyboardButton.builder()
+                                    .text("На головну")
+                                    .build());
+
+                        }})
+                        .build())
+                .build());
+    }
+
+
 
 }

@@ -85,7 +85,7 @@ public class ServiceInputHandler {
                 .build());
         serviceHashMap.get(botUser).setEndDate(LocalDateTime.now());
         botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
-        UserInputHandler.menuMessage(messageSender, message);
+        UserInputHandler.mainMenuMessage(messageSender, message);
         database.addService(serviceHashMap.get(botUser));
         System.out.println(database.getTotalServices());
     }

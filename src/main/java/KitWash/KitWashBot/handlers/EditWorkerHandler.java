@@ -45,7 +45,7 @@ public class EditWorkerHandler {
                     .chatId(String.valueOf(botUser.getTelegramID()))
                     .build());
             botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
-            UserInputHandler.menuMessage(messageSender, message);
+            UserInputHandler.mainMenuMessage(messageSender, message);
             throw new Exception();
         }
         messageSender.sendMessage(SendMessage.builder()
@@ -63,7 +63,7 @@ public class EditWorkerHandler {
         try {
             outWorkers(message); // Виводимо працівників
         } catch (Exception e) {
-            UserInputHandler.menuMessage(messageSender, message);
+            UserInputHandler.mainMenuMessage(messageSender, message);
             botUser.setGeneralStatus(GeneralStatus.NONE);
             return;
         }
@@ -87,7 +87,7 @@ public class EditWorkerHandler {
                     .chatId(String.valueOf(botUser.getTelegramID()))
                     .build());
             botUser.setGeneralStatus(GeneralStatus.NONE);
-            UserInputHandler.menuMessage(messageSender, message);
+            UserInputHandler.mainMenuMessage(messageSender, message);
         }
 
         messageSender.sendMessage(SendMessage.builder()
@@ -157,7 +157,7 @@ public class EditWorkerHandler {
 
         database.getWorkers().get(integer).setName(newName);
         botUser.setGeneralStatus(GeneralStatus.NONE);
-        UserInputHandler.menuMessage(messageSender, message);
+        UserInputHandler.mainMenuMessage(messageSender, message);
     }
     private void editSurname(Message message){
         BotUser botUser = cache.findBy(message.getChatId());
@@ -167,7 +167,7 @@ public class EditWorkerHandler {
 
         database.getWorkers().get(integer).setSurname(newSurname);
         botUser.setGeneralStatus(GeneralStatus.NONE);
-        UserInputHandler.menuMessage(messageSender, message);
+        UserInputHandler.mainMenuMessage(messageSender, message);
     }
     private void editTelegramId(Message message){
         BotUser botUser = cache.findBy(message.getChatId());
@@ -177,7 +177,7 @@ public class EditWorkerHandler {
 
         database.getWorkers().get(integer).setTelegramId(newTelegramId);
         botUser.setGeneralStatus(GeneralStatus.NONE);
-        UserInputHandler.menuMessage(messageSender, message);
+        UserInputHandler.mainMenuMessage(messageSender, message);
     }
 
     public void generalHandler(Message message){
