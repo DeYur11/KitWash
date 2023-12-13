@@ -1,10 +1,7 @@
 package KitWash.KitWashBot.handlers;
 
 import KitWash.KitWashBot.cache.Cache;
-import KitWash.KitWashBot.domain.BotUser;
-import KitWash.KitWashBot.domain.InputStatus;
-import KitWash.KitWashBot.domain.ManageStatus;
-import KitWash.KitWashBot.domain.WorkerEditStatus;
+import KitWash.KitWashBot.domain.*;
 import KitWash.KitWashBot.messageSender.MessageSender;
 import KitWash.KitWashBot.model.Database;
 import org.springframework.stereotype.Component;
@@ -17,13 +14,16 @@ public class ManageWorkerHandler {
     private final MessageSender messageSender;
     private final EditWorkerHandler editWorkerHandler;
     private final AdminInputHandler adminInputHandler;
+
+    private final DeleteWorkerHandler deleteWorkerHandler;
     private final Cache<BotUser> cache;
 
-    public ManageWorkerHandler(Database database, MessageSender messageSender, EditWorkerHandler editWorkerHandler, AdminInputHandler adminInputHandler, Cache<BotUser> cache) {
+    public ManageWorkerHandler(Database database, MessageSender messageSender, EditWorkerHandler editWorkerHandler, AdminInputHandler adminInputHandler, DeleteWorkerHandler deleteWorkerHandler, Cache<BotUser> cache) {
         this.database = database;
         this.messageSender = messageSender;
         this.editWorkerHandler = editWorkerHandler;
         this.adminInputHandler = adminInputHandler;
+        this.deleteWorkerHandler = deleteWorkerHandler;
         this.cache = cache;
     }
 
@@ -56,6 +56,11 @@ public class ManageWorkerHandler {
                         .chatId(String.valueOf(botUser.getTelegramID()))
                         .build());
                 botUser.setInputStatus(InputStatus.INPUT_NAME);
+            }
+            case "Видалити працівника" -> {
+                botUser.setManageStatus(ManageStatus.DELETING);
+                botUser.setDeleteWorkerStatus(DeleteWorkerStatus.NONE);
+                deleteWorkerHandler.generalHandler(message);
             }
         }
     }
