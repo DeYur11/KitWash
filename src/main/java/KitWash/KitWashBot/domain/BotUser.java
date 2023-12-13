@@ -6,6 +6,8 @@ import KitWash.KitWashBot.model.Worker;
 public class BotUser {
     GeneralStatus generalStatus;
     InputStatus inputStatus;
+
+    DeleteWorkerStatus deleteWorkerStatus;
     WorkStatus workStatus;
     WorkerEditStatus workerEditStatus;
     ManageStatus manageStatus;
@@ -21,6 +23,14 @@ public class BotUser {
         this.generalStatus = generalStatus;
     }
     public BotUser(){}
+
+    public DeleteWorkerStatus getDeleteWorkerStatus() {
+        return deleteWorkerStatus;
+    }
+
+    public void setDeleteWorkerStatus(DeleteWorkerStatus deleteWorkerStatus) {
+        this.deleteWorkerStatus = deleteWorkerStatus;
+    }
 
     public ManageStatus getManageStatus() {
         return manageStatus;
