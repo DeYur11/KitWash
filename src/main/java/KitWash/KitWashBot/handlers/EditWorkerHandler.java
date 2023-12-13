@@ -64,7 +64,7 @@ public class EditWorkerHandler {
             outWorkers(message); // Виводимо працівників
         } catch (Exception e) {
             UserInputHandler.mainMenuMessage(messageSender, message);
-            botUser.setGeneralStatus(GeneralStatus.NONE);
+            botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
             return;
         }
 
@@ -86,7 +86,7 @@ public class EditWorkerHandler {
                     .text("Невірний номер працівника")
                     .chatId(String.valueOf(botUser.getTelegramID()))
                     .build());
-            botUser.setGeneralStatus(GeneralStatus.NONE);
+            botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
             UserInputHandler.mainMenuMessage(messageSender, message);
         }
 
@@ -156,7 +156,7 @@ public class EditWorkerHandler {
         Integer integer = database.getWorkers().indexOf(botUser.getWorker());
 
         database.getWorkers().get(integer).setName(newName);
-        botUser.setGeneralStatus(GeneralStatus.NONE);
+        botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
         UserInputHandler.mainMenuMessage(messageSender, message);
     }
     private void editSurname(Message message){
@@ -166,7 +166,7 @@ public class EditWorkerHandler {
         Integer integer = database.getWorkers().indexOf(botUser.getWorker());
 
         database.getWorkers().get(integer).setSurname(newSurname);
-        botUser.setGeneralStatus(GeneralStatus.NONE);
+        botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
         UserInputHandler.mainMenuMessage(messageSender, message);
     }
     private void editTelegramId(Message message){
@@ -176,7 +176,7 @@ public class EditWorkerHandler {
         Integer integer = database.getWorkers().indexOf(botUser.getWorker());
 
         database.getWorkers().get(integer).setTelegramId(newTelegramId);
-        botUser.setGeneralStatus(GeneralStatus.NONE);
+        botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
         UserInputHandler.mainMenuMessage(messageSender, message);
     }
 

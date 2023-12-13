@@ -32,11 +32,11 @@ public class UserInputHandler {
         this.manageWorkerHandler = manageWorkerHandler;
 
         BotUser Yura = new BotUser(708874243L);
-        Yura.setGeneralStatus(GeneralStatus.HOME_PAGE);
+        Yura.setGeneralStatus(GeneralStatus.START_PAGE);
         cache.add(Yura);
 
         BotUser Ivan = new BotUser(343523935L);
-        Ivan.setGeneralStatus(GeneralStatus.HOME_PAGE);
+        Ivan.setGeneralStatus(GeneralStatus.START_PAGE);
         cache.add(Ivan);
     }
 
@@ -45,12 +45,12 @@ public class UserInputHandler {
         BotUser botUser = cache.findBy(message.getChatId());
         if(botUser !=null){
             switch (botUser.getGeneralStatus()){
-                case HOME_PAGE:
+                case START_PAGE:
                     String text = message.getText();
                     mainMenuMessage(messageSender, message);
-                    botUser.setGeneralStatus(GeneralStatus.NONE);
+                    botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
                     break;
-                case NONE:
+                case HOME_PAGE:
                     switch (message.getText()){
                         case "Розпочати послугу":
                             botUser.setGeneralStatus(GeneralStatus.WORKING);

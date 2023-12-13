@@ -60,7 +60,7 @@ public class AdminInputHandler {
                         .build());
                 break;
             case INPUT_ID:
-                botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
+                botUser.setGeneralStatus(GeneralStatus.START_PAGE);
                 addingUsers.get(botUser).setId(Long.parseLong(message.getText()));
                 messageSender.sendMessage(SendMessage.builder()
                         .text("Працівник успішно доданий")
@@ -78,7 +78,7 @@ public class AdminInputHandler {
                     e.printStackTrace();
                 }
                 System.out.println(database.getWorkers());
-                cache.add(new BotUser(addingUsers.get(botUser).getId(), GeneralStatus.HOME_PAGE));
+                cache.add(new BotUser(addingUsers.get(botUser).getId(), GeneralStatus.START_PAGE));
                 messageSender.sendMessage(SendMessage.builder()
                         .text("Ви додані\n")
                         .chatId(addingUsers.get(botUser).getId())
