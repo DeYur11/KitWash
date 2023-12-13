@@ -11,7 +11,6 @@ public class BotUser {
 
     DeleteWorkerStatus deleteWorkerStatus;
     WorkStatus workStatus;
-    DeleteWorkerStatus deleteWorkerStatus;
     WorkerEditStatus workerEditStatus;
     ServiceEditStatus serviceEditStatus;
     ManageStatus manageStatus;
@@ -28,18 +27,10 @@ public class BotUser {
         this.generalStatus = generalStatus;
     }
     public BotUser(){}
-    public DeleteWorkerStatus getDeleteWorkerStatus() {
-        return deleteWorkerStatus;
-    }
-
-    public void setDeleteWorkerStatus(DeleteWorkerStatus deleteWorkerStatus) {
-        this.deleteWorkerStatus = deleteWorkerStatus;
-    }
 
     public DeleteWorkerStatus getDeleteWorkerStatus() {
         return deleteWorkerStatus;
     }
-
     public void setDeleteWorkerStatus(DeleteWorkerStatus deleteWorkerStatus) {
         this.deleteWorkerStatus = deleteWorkerStatus;
     }

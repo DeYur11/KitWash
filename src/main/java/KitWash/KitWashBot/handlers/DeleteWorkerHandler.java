@@ -21,13 +21,11 @@ public class DeleteWorkerHandler {
     private final Database database;
     private final MessageSender messageSender;
     private final Cache<BotUser> cache;
-    private final HashMap<BotUser, AddForm> addingUsers;
 
-    public DeleteWorkerHandler(Database database, MessageSender messageSender, Cache<BotUser> cache, HashMap<BotUser, AddForm> addingUsers) {
+    public DeleteWorkerHandler(Database database, MessageSender messageSender, Cache<BotUser> cache) {
         this.database = database;
         this.messageSender = messageSender;
         this.cache = cache;
-        this.addingUsers = addingUsers;
     }
     private void outWorkers(Message message) throws Exception {
         BotUser botUser = cache.findBy(message.getChatId());
