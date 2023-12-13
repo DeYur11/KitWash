@@ -61,6 +61,10 @@ public class Worker {
         return "Worker " + surname + ' ' + name  + " telegramId=" + telegramId;
     }
     public String outString(){
-        return surname + ' ' + name +'\n';
+        double salary = 0.0F;
+        for(var i: completedServices){
+            salary += i.getPrice()*0.5/i.workers.size();
+        }
+        return surname + ' ' + name + ". Зарплата: " + salary + '\n';
     }
 }

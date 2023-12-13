@@ -4,9 +4,12 @@ import KitWash.KitWashBot.cache.Cache;
 import KitWash.KitWashBot.domain.*;
 import KitWash.KitWashBot.messageSender.MessageSender;
 import KitWash.KitWashBot.model.Database;
+import KitWash.KitWashBot.model.Worker;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+
+import java.util.Vector;
 
 @Component
 public class ManageWorkerHandler {
@@ -31,9 +34,7 @@ public class ManageWorkerHandler {
         BotUser botUser = cache.findBy(message.getChatId());
         switch (botUser.getManageStatus()){
             case EDITING -> editWorkerHandler.generalHandler(message);
-            case DELETING -> {
-                return;
-            }
+            case DELETING -> deleteWorkerHandler.generalHandler(message);
             case ADDING -> adminInputHandler.choose(message);
             case NONE -> chooseStatus(message);
         }
@@ -61,7 +62,41 @@ public class ManageWorkerHandler {
                 botUser.setManageStatus(ManageStatus.DELETING);
                 botUser.setDeleteWorkerStatus(DeleteWorkerStatus.NONE);
                 deleteWorkerHandler.generalHandler(message);
+            }case "Список працівників" -> {
+                try {
+                    outWorkers(message);
+                } catch (Exception e) {
+                }
+
+                botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
+                UserInputHandler.mainMenuMessage(messageSender, message);
             }
         }
+    }
+
+    private void outWorkers(Message message) throws Exception {
+        BotUser botUser = cache.findBy(message.getChatId());
+        Vector<Worker> workers = database.getWorkers();
+        String MessageBody= "";
+        if (workers.size() != 0) {
+
+            MessageBody = "Список працівників:\n";
+            for (int i = 0; i < workers.size(); i++) {
+                MessageBody  = MessageBody.concat((i + 1) + ". " + workers.get(i).outString());
+            }
+        }
+        else{
+            messageSender.sendMessage(SendMessage.builder()
+                    .text("Cписок пустий")
+                    .chatId(String.valueOf(botUser.getTelegramID()))
+                    .build());
+            botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
+            UserInputHandler.mainMenuMessage(messageSender, message);
+            throw new Exception();
+        }
+        messageSender.sendMessage(SendMessage.builder()
+                .text(MessageBody)
+                .chatId(String.valueOf(botUser.getTelegramID()))
+                .build());
     }
 }
