@@ -4,5 +4,6 @@ public enum ManageStatus {
     ADDING,
     EDITING,
     DELETING,
+    REVIEW,
     NONE
 }

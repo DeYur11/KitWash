@@ -52,8 +52,6 @@ public class EditWorkerHandler {
                 .text(MessageBody)
                 .chatId(String.valueOf(botUser.getTelegramID()))
                 .build());
-
-
     }
 
     public void chooseWorker(Message message){

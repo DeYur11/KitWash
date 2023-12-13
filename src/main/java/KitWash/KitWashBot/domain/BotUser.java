@@ -1,15 +1,20 @@
 package KitWash.KitWashBot.domain;
 
-import KitWash.KitWashBot.handlers.ManageWorkerHandler;
+import KitWash.KitWashBot.model.Service;
 import KitWash.KitWashBot.model.Worker;
+import org.springframework.stereotype.Component;
 
+@Component
 public class BotUser {
     GeneralStatus generalStatus;
     InputStatus inputStatus;
     WorkStatus workStatus;
+    DeleteWorkerStatus deleteWorkerStatus;
     WorkerEditStatus workerEditStatus;
+    ServiceEditStatus serviceEditStatus;
     ManageStatus manageStatus;
     Worker worker;
+    Service service;
     private Long telegramID;
 
     //конструктори класу BotUser
@@ -21,6 +26,13 @@ public class BotUser {
         this.generalStatus = generalStatus;
     }
     public BotUser(){}
+    public DeleteWorkerStatus getDeleteWorkerStatus() {
+        return deleteWorkerStatus;
+    }
+
+    public void setDeleteWorkerStatus(DeleteWorkerStatus deleteWorkerStatus) {
+        this.deleteWorkerStatus = deleteWorkerStatus;
+    }
 
     public ManageStatus getManageStatus() {
         return manageStatus;
@@ -28,6 +40,22 @@ public class BotUser {
 
     public void setManageStatus(ManageStatus manageStatus) {
         this.manageStatus = manageStatus;
+    }
+
+    public Service getService() {
+        return service;
+    }
+
+    public void setService(Service service) {
+        this.service = service;
+    }
+
+    public ServiceEditStatus getServiceEditStatus() {
+        return serviceEditStatus;
+    }
+
+    public void setServiceEditStatus(ServiceEditStatus serviceEditStatus) {
+        this.serviceEditStatus = serviceEditStatus;
     }
 
     public WorkerEditStatus getWorkerEditStatus() {

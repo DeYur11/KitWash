@@ -61,6 +61,6 @@ public class Worker {
         return "Worker " + surname + ' ' + name  + " telegramId=" + telegramId;
     }
     public String outString(){
-        return surname + ' ' + name + ' ' + "Телеграм ID: " + telegramId + '\n';
+        return surname + ' ' + name +'\n';
     }
 }

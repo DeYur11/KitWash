@@ -1,5 +1,8 @@
 package KitWash.KitWashBot.handlers;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class AddForm {
     private String name;
     private String surname;

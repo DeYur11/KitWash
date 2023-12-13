@@ -1,12 +1,10 @@
 package KitWash.KitWashBot.handlers;
 
 import KitWash.KitWashBot.cache.Cache;
-import KitWash.KitWashBot.domain.BotUser;
-import KitWash.KitWashBot.domain.GeneralStatus;
-import KitWash.KitWashBot.domain.ManageStatus;
-import KitWash.KitWashBot.domain.WorkStatus;
+import KitWash.KitWashBot.domain.*;
 import KitWash.KitWashBot.messageSender.MessageSender;
 import KitWash.KitWashBot.model.Database;
+import KitWash.KitWashBot.model.Worker;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -22,14 +20,17 @@ public class UserInputHandler {
     private final ServiceInputHandler serviceInputHandler;
     private final Database database;
     private final ManageWorkerHandler manageWorkerHandler;
+    private final ManageServiceHandler manageServiceHandler;
 
     //конструктор класу UserInputHandler
-    public UserInputHandler(MessageSender messageSender, Database database, AdminInputHandler adminInputHandler, Cache<BotUser> cache, ServiceInputHandler serviceInputHandler, EditWorkerHandler editWorkerHandler, ManageWorkerHandler manageWorkerHandler){
+    public UserInputHandler(MessageSender messageSender, Database database, AdminInputHandler adminInputHandler, Cache<BotUser> cache, ServiceInputHandler serviceInputHandler, EditWorkerHandler editWorkerHandler, ManageWorkerHandler manageWorkerHandler,ManageServiceHandler manageServiceHandler){
         this.messageSender = messageSender;
         this.database = database;
         this.cache = cache;
         this.serviceInputHandler = serviceInputHandler;
         this.manageWorkerHandler = manageWorkerHandler;
+        this.manageServiceHandler = manageServiceHandler;
+
 
         BotUser Yura = new BotUser(708874243L);
         Yura.setGeneralStatus(GeneralStatus.START_PAGE);
@@ -38,6 +39,18 @@ public class UserInputHandler {
         BotUser Ivan = new BotUser(343523935L);
         Ivan.setGeneralStatus(GeneralStatus.START_PAGE);
         cache.add(Ivan);
+
+        BotUser Anton = new BotUser(623448844L);
+        Anton.setGeneralStatus(GeneralStatus.START_PAGE);
+        cache.add(Anton);
+
+        try{
+            database.addWorker(new Worker("Антон", "Скаковський", 623448844L));
+            database.addWorker(new Worker("Юрій", "Дебеляк", 708874243L));
+            database.addWorker(new Worker("Іван", "Легеза", 343523935L));
+        }catch (Exception exc){
+            exc.printStackTrace();
+        }
     }
 
     //функція обробки вводу користувача при роботі з ботом
@@ -62,6 +75,7 @@ public class UserInputHandler {
                             workerMenuMessage(messageSender, message);
                             break;
                         case "Управління послугами":
+                            botUser.setGeneralStatus(GeneralStatus.MANAGING_SERVICES);
                             serviceMenuMessage(messageSender, message);
                             break;
                     }
@@ -71,6 +85,9 @@ public class UserInputHandler {
                     break;
                 case MANAGING_WORKERS:
                     manageWorkerHandler.generalHandler(message);
+                    break;
+                case MANAGING_SERVICES:
+                    manageServiceHandler.generalHandler(message);
                     break;
             }
 
@@ -151,7 +168,9 @@ public class UserInputHandler {
         );
     }
 
-    public static void serviceMenuMessage(MessageSender messageSender, Message message){
+    public void serviceMenuMessage(MessageSender messageSender, Message message){
+        BotUser botUser = cache.findBy(message.getChatId());
+        botUser.setManageStatus(ManageStatus.NONE);
         messageSender.sendMessage(
                 SendMessage.builder()
                         .text("Редагування послуг")

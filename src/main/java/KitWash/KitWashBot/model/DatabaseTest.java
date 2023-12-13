@@ -15,14 +15,14 @@ public class DatabaseTest {
         Service service2 = new Service();
         Service service3 = new Service();
 
-        service.startDate = LocalDateTime.of(2023, 11, 28, 7, 12);
+        /*service.startDate = LocalDateTime.of(2023, 11, 28, 7, 12);
         service.endDate = LocalDateTime.of(2023, 11, 28, 8, 12);
 
         service2.startDate = LocalDateTime.of(2023, 11, 28, 7, 13);
         service2.endDate = LocalDateTime.of(2023, 11, 28, 8, 13);
 
         service3.startDate = LocalDateTime.of(2023, 11, 28, 9, 13);
-        service3.endDate = LocalDateTime.of(2023, 11, 28, 10, 13);
+        service3.endDate = LocalDateTime.of(2023, 11, 28, 10, 13);*/
 
         service.addWorker(worker);
         service2.addWorker(worker);

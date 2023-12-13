@@ -1,11 +1,13 @@
 package KitWash.KitWashBot.model;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Service {
-    LocalDateTime startDate;
-    LocalDateTime endDate;
+    LocalTime startDate;
+    LocalTime endDate;
     final HashSet<Worker> workers = new HashSet<>(); // працівники, що працюють над виконанням послуги
     private ServiceType serviceType;
 
@@ -15,10 +17,10 @@ public class Service {
     }
 
     //геттери класу Service
-    public LocalDateTime getEndDate() {
+    public LocalTime getEndDate() {
         return endDate;
     }
-    public LocalDateTime getStartDate() {
+    public LocalTime getStartDate() {
         return startDate;
     }
     public int getPrice(){
@@ -26,10 +28,10 @@ public class Service {
     }
 
     //сеттери класу Service
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(LocalTime endDate) {
         this.endDate = endDate;
     }
-    public void setStartDate(LocalDateTime start) {
+    public void setStartDate(LocalTime start) {
         this.startDate = start;
     }
     public void setServiceType(ServiceType serviceType) {
@@ -58,5 +60,30 @@ public class Service {
                 ", workers=" + workers +
                 ", serviceType=" + serviceType +
                 '}';
+    }
+    public String outString(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        String sEndTime = endDate.format(formatter); // "12:30"
+        String sStartTime = startDate.format(formatter); // "12:30"
+
+        String performers = "Виконавці:"+ '\n';
+
+        for (Worker worker : workers) {
+            performers = performers.concat( "\t- " + worker.outString() + '\n');
+
+        }
+
+        String serviceType="";
+        switch (this.getServiceType()) {
+            case BODYWASH -> serviceType = "Мийка кузова";
+            case INTERIORBODYWASH -> serviceType = "Мийка кузова і салону";
+            case DRYCLEANING -> serviceType = "Хімчистка";
+        }
+
+
+
+        return "Послуга: " + serviceType + '\n' +
+                "Початок послуги: " + sStartTime +" Кінець послуги: " + sEndTime + '\n'+
+                performers;
     }
 }

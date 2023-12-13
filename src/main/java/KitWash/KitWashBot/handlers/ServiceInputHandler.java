@@ -17,7 +17,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.Vector;
 
 @Component
 public class ServiceInputHandler {
@@ -44,6 +46,7 @@ public class ServiceInputHandler {
         switch (botUser.getWorkStatus()) {
             case INPUT_CATEGORY -> chooseCategory(message, botUser);
             case WORKING ->endWork(message, botUser);
+
         }
 
     }
@@ -55,7 +58,7 @@ public class ServiceInputHandler {
             case "Мийка кузова і салону" -> serviceHashMap.get(botUser).setServiceType(ServiceType.INTERIORBODYWASH);
             case "Хімчистка" -> serviceHashMap.get(botUser).setServiceType(ServiceType.DRYCLEANING);
         }
-        serviceHashMap.get(botUser).setStartDate(LocalDateTime.now());
+        serviceHashMap.get(botUser).setStartDate(LocalTime.now());
         try {
             serviceHashMap.get(botUser).addWorker(database.getWorkers().stream().filter(worker -> botUser.getTelegramID().equals(worker.getTelegramId())).findAny().orElse(null));
             }catch (Exception e){
@@ -83,7 +86,7 @@ public class ServiceInputHandler {
                 .text("Послуга завершена")
                 .chatId(String.valueOf(botUser.getTelegramID()))
                 .build());
-        serviceHashMap.get(botUser).setEndDate(LocalDateTime.now());
+        serviceHashMap.get(botUser).setEndDate(LocalTime.now());
         botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
         UserInputHandler.mainMenuMessage(messageSender, message);
         database.addService(serviceHashMap.get(botUser));
