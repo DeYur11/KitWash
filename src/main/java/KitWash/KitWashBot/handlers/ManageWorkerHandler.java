@@ -62,12 +62,17 @@ public class ManageWorkerHandler {
                 botUser.setManageStatus(ManageStatus.DELETING);
                 botUser.setDeleteWorkerStatus(DeleteWorkerStatus.NONE);
                 deleteWorkerHandler.generalHandler(message);
-            }case "Список працівників" -> {
+            }
+            case "Список працівників" -> {
                 try {
                     outWorkers(message);
                 } catch (Exception e) {
                 }
 
+                botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
+                UserInputHandler.mainMenuMessage(messageSender, message);
+            }
+            case "На головну" -> {
                 botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
                 UserInputHandler.mainMenuMessage(messageSender, message);
             }

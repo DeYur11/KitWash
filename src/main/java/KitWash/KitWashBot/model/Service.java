@@ -23,6 +23,11 @@ public class Service {
     public LocalTime getStartDate() {
         return startDate;
     }
+
+    public HashSet<Worker> getWorkers() {
+        return workers;
+    }
+
     public int getPrice(){
         return serviceType.price;
     }

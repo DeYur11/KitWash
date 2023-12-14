@@ -54,7 +54,6 @@ public class ManageServiceHandler {
                     outServicesList(message);
                 }
                 catch (Exception exc){
-                    UserInputHandler.mainMenuMessage(messageSender, message);
                     return;
                 }
                 botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
@@ -64,6 +63,10 @@ public class ManageServiceHandler {
                 botUser.setManageStatus(ManageStatus.DELETING);
                 botUser.setDeleteServiceStatus(DeleteServiceStatus.NONE);
                 deleteServiceHandler.generalHandler(message);
+            }
+            case "На головну" -> {
+                botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
+                UserInputHandler.mainMenuMessage(messageSender, message);
             }
 
         }

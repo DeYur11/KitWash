@@ -27,6 +27,8 @@ public class EditServiceHandler {
     private final Database database;
     private final MessageSender messageSender;
     private final Cache<BotUser> cache;
+    Vector<Worker> freeWorkersVector;
+    Vector<Worker> busyWorkersVector;
 
     public EditServiceHandler(Database database, MessageSender messageSender, Cache<BotUser> cache) {
         this.database = database;
@@ -34,7 +36,7 @@ public class EditServiceHandler {
         this.cache = cache;
     }
 
-    private void outServicesList(Message message) throws Exception {
+    private void outServicesList(Message message)throws Exception{
 
         BotUser botUser = cache.findBy(message.getChatId());
         Vector<Service> servicesList = database.getTotalServices();
@@ -60,24 +62,113 @@ public class EditServiceHandler {
                 .chatId(String.valueOf(botUser.getTelegramID()))
                 .build());
     }
+    private void workersListToAdd(Message message){
+        BotUser botUser = cache.findBy(message.getChatId());
+        Vector<Worker> workersVector = database.getWorkers();
+        freeWorkersVector = new Vector<>();
+        String MessageBody= "";
 
+        if (workersVector.size() != botUser.getService().getWorkers().size()) {
+
+            MessageBody = "Оберіть працівника:\n";
+            for (int i = 0; i < workersVector.size(); i++) {
+                if(!botUser.getService().getWorkers().contains(workersVector.get(i))){
+                    freeWorkersVector.add(workersVector.get(i));
+                    MessageBody  = MessageBody.concat(freeWorkersVector.size() + ". " + workersVector.get(i).getSurname() + " " + workersVector.get(i).getName() + '\n');
+                }
+            }
+        }
+        else{
+            messageSender.sendMessage(SendMessage.builder()
+                    .text("Задіяні всі працівники")
+                    .chatId(String.valueOf(botUser.getTelegramID()))
+                    .build());
+            botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
+            UserInputHandler.mainMenuMessage(messageSender, message);
+        }
+        messageSender.sendMessage(SendMessage.builder()
+                .text(MessageBody)
+                .chatId(String.valueOf(botUser.getTelegramID()))
+                .build());
+        botUser.setServiceEditStatus(ServiceEditStatus.ADD_WORKERS);
+    }
+
+    private void workersListToDelete(Message message){
+        BotUser botUser = cache.findBy(message.getChatId());
+        Vector<Worker> workersVector = database.getWorkers();
+        busyWorkersVector = new Vector<>();
+        String MessageBody= "";
+
+        if (workersVector.size() != 1) {
+
+            MessageBody = "Оберіть працівника:\n";
+            for (int i = 0; i < workersVector.size(); i++) {
+                if(botUser.getService().getWorkers().contains(workersVector.get(i))){
+                    busyWorkersVector.add(workersVector.get(i));
+                    MessageBody  = MessageBody.concat((i + 1) + ". " + workersVector.get(i).getSurname() + " " + workersVector.get(i).getName() + '\n');
+                }
+            }
+        }
+        else{
+            messageSender.sendMessage(SendMessage.builder()
+                    .text("Не можете видалити останього працівника!")
+                    .chatId(String.valueOf(botUser.getTelegramID()))
+                    .build());
+            botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
+            UserInputHandler.mainMenuMessage(messageSender, message);
+        }
+        messageSender.sendMessage(SendMessage.builder()
+                .text(MessageBody)
+                .chatId(String.valueOf(botUser.getTelegramID()))
+                .build());
+        botUser.setServiceEditStatus(ServiceEditStatus.DELETE_WORKERS);
+    }
+
+
+    private void addWorker(Message message){
+
+        try {
+            BotUser botUser = cache.findBy(message.getChatId());
+            int index = Integer.parseInt(message.getText());
+
+            botUser.getService().addWorker(freeWorkersVector.get(index - 1));
+            freeWorkersVector.get(index - 1).addCompletedService(botUser.getService());
+
+            botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
+            UserInputHandler.mainMenuMessage(messageSender, message);
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+        }
+
+    }
+    private void deleteWorker(Message message) {
+        BotUser botUser = cache.findBy(message.getChatId());
+        int index = Integer.parseInt(message.getText());
+
+        botUser.getService().deleteWorker(busyWorkersVector.get(index - 1));
+        busyWorkersVector.get(index - 1).removeService(botUser.getService());
+
+        botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
+        UserInputHandler.mainMenuMessage(messageSender, message);
+    }
     public void chooseService(Message message){
         BotUser botUser = cache.findBy(message.getChatId());
+
         try {
             outServicesList(message); // Виводимо працівників
         } catch (Exception e) {
-            UserInputHandler.mainMenuMessage(messageSender, message);
-            botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
             return;
         }
-
         messageSender.sendMessage(SendMessage.builder()
                 .text("Виберіть послугу зі списку, вписавши її номер: ")
                 .chatId(String.valueOf(botUser.getTelegramID()))
                 .build());
 
         botUser.setServiceEditStatus(ServiceEditStatus.NUMBER);
+
     }
+
     private void chooseField(Message message){
         BotUser botUser = cache.findBy(message.getChatId());
         int index = Integer.parseInt(message.getText());
@@ -124,7 +215,6 @@ public class EditServiceHandler {
                 .build());
         botUser.setServiceEditStatus(ServiceEditStatus.INPUT_FIELDS);
     }
-
     private void enterServiceType(Message message){
         BotUser botUser = cache.findBy(message.getChatId());
 
@@ -166,14 +256,15 @@ public class EditServiceHandler {
                 .build());
         botUser.setServiceEditStatus(ServiceEditStatus.END_TIME);
     }
+
     private void handleFieldInput(Message message){
         switch (message.getText()){
             case "Тип послуги" -> enterServiceType(message);
             case "Час закінчення послуги" -> enterEndTime(message);
             case "Час початку послуги" -> enterStartTime(message);
-            default -> {
-                System.out.println("Error");
-                return;
+            case "Додати працівника" -> workersListToAdd(message);
+            case "Видалити працівника" -> workersListToDelete(message);
+            default -> {  System.out.println("Error");
             }
         }
     }
@@ -232,6 +323,8 @@ public class EditServiceHandler {
             case CHOOSE_TYPE -> setServiceType(message);
             case START_TIME -> editStartTime(message);
             case END_TIME -> editEndTime(message);
+            case ADD_WORKERS -> addWorker(message);
+            case DELETE_WORKERS -> deleteWorker(message);
         }
     }
 }

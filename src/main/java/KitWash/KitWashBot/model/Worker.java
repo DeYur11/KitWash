@@ -58,12 +58,12 @@ public class Worker {
     //перетворення інформації про робітника у String
     @Override
     public String toString() {
-        return "Worker " + surname + ' ' + name  + " telegramId=" + telegramId;
+        return surname + ' ' + name  + " Телеграм ID: " + telegramId;
     }
     public String outString(){
         double salary = 0.0F;
         for(var i: completedServices){
-            salary += i.getPrice()*0.5/i.workers.size();
+            salary += (i.getPrice()*0.5)/i.workers.size();
         }
         return surname + ' ' + name + ". Зарплата: " + salary + '\n';
     }

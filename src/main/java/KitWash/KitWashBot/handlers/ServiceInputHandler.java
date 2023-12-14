@@ -46,9 +46,7 @@ public class ServiceInputHandler {
         switch (botUser.getWorkStatus()) {
             case INPUT_CATEGORY -> chooseCategory(message, botUser);
             case WORKING ->endWork(message, botUser);
-
         }
-
     }
 
     //функція початку послуги з попереднім вибором категорії та робітника
@@ -58,6 +56,11 @@ public class ServiceInputHandler {
             case "Мийка кузова" -> serviceHashMap.get(botUser).setServiceType(ServiceType.BODYWASH);
             case "Мийка кузова і салону" -> serviceHashMap.get(botUser).setServiceType(ServiceType.INTERIORBODYWASH);
             case "Хімчистка" -> serviceHashMap.get(botUser).setServiceType(ServiceType.DRYCLEANING);
+            default -> {
+                botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
+                UserInputHandler.mainMenuMessage(messageSender, message);
+                return;
+            }
         }
         serviceHashMap.get(botUser).setStartDate(LocalTime.now());
         try {

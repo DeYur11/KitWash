@@ -28,7 +28,7 @@ public class EditWorkerHandler {
         this.cache = cache;
     }
 
-    private void outWorkers(Message message) throws Exception {
+    private void outWorkers(Message message) {
         BotUser botUser = cache.findBy(message.getChatId());
         Vector<Worker> workers = database.getWorkers();
         String MessageBody= "";
@@ -36,7 +36,7 @@ public class EditWorkerHandler {
 
             MessageBody = "Список працівників:\n";
             for (int i = 0; i < workers.size(); i++) {
-                MessageBody  = MessageBody.concat((i + 1) + ". " + workers.get(i).outString());
+                MessageBody  = MessageBody.concat((i + 1) + ". " + workers.get(i).toString());
             }
         }
         else{
@@ -46,7 +46,7 @@ public class EditWorkerHandler {
                     .build());
             botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
             UserInputHandler.mainMenuMessage(messageSender, message);
-            throw new Exception();
+            return;
         }
         messageSender.sendMessage(SendMessage.builder()
                 .text(MessageBody)

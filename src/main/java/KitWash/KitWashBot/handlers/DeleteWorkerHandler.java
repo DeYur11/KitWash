@@ -27,7 +27,7 @@ public class DeleteWorkerHandler {
         this.messageSender = messageSender;
         this.cache = cache;
     }
-    private void outWorkers(Message message) throws Exception {
+    private void outWorkers(Message message){
         BotUser botUser = cache.findBy(message.getChatId());
         Vector<Worker> workers = database.getWorkers();
         String MessageBody= "";
@@ -45,7 +45,7 @@ public class DeleteWorkerHandler {
                     .build());
             botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
             UserInputHandler.mainMenuMessage(messageSender, message);
-            throw new Exception();
+            return;
         }
         messageSender.sendMessage(SendMessage.builder()
                 .text(MessageBody)
@@ -61,8 +61,6 @@ public class DeleteWorkerHandler {
         try {
             outWorkers(message); // Виводимо працівників
         } catch (Exception e) {
-            UserInputHandler.mainMenuMessage(messageSender, message);
-            botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
             return;
         }
 
@@ -75,6 +73,8 @@ public class DeleteWorkerHandler {
     }
     private void deleteWorker(Message message){
         BotUser botUser = cache.findBy(message.getChatId());
+        int index = Integer.parseInt(message.getText());
+        botUser.setWorker(database.getWorkers().get(index - 1));
         try {
             for(var i: cache.getAll()){
                 if(i.getTelegramID().equals(botUser.getWorker().getTelegramId())){
@@ -83,7 +83,7 @@ public class DeleteWorkerHandler {
                 }
             }
         }catch (Exception e){
-            System.out.println("Error");
+            e.printStackTrace();
         }
 
         try {

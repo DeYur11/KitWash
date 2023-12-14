@@ -45,8 +45,6 @@ public class DeleteServiceHandler {
                     .text("Cписок пустий, редагування неможливе")
                     .chatId(String.valueOf(botUser.getTelegramID()))
                     .build());
-            botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
-            UserInputHandler.mainMenuMessage(messageSender, message);
             throw new Exception();
         }
         messageSender.sendMessage(SendMessage.builder()
@@ -61,8 +59,8 @@ public class DeleteServiceHandler {
         try {
             outServicesList(message); // Виводимо працівників
         } catch (Exception e) {
-            UserInputHandler.mainMenuMessage(messageSender, message);
             botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
+            UserInputHandler.mainMenuMessage(messageSender, message);
             return;
         }
         messageSender.sendMessage(SendMessage.builder()

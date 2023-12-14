@@ -59,7 +59,6 @@ public class UserInputHandler {
         if(botUser !=null){
             switch (botUser.getGeneralStatus()){
                 case START_PAGE:
-                    String text = message.getText();
                     mainMenuMessage(messageSender, message);
                     botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
                     break;
@@ -90,7 +89,6 @@ public class UserInputHandler {
                     manageServiceHandler.generalHandler(message);
                     break;
             }
-
         }else if (message.hasText()){
             var sendMessage = SendMessage.builder()
                     .text("Please wait for administrator to add you.\n" +
@@ -171,6 +169,7 @@ public class UserInputHandler {
     public void serviceMenuMessage(MessageSender messageSender, Message message){
         BotUser botUser = cache.findBy(message.getChatId());
         botUser.setManageStatus(ManageStatus.NONE);
+
         messageSender.sendMessage(
                 SendMessage.builder()
                         .text("Редагування послуг")
