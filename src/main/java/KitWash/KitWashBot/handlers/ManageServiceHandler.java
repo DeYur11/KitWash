@@ -16,14 +16,16 @@ public class ManageServiceHandler {
     private final Database database;
     private final MessageSender messageSender;
     private final EditServiceHandler editServiceHandler;
+    private final DeleteServiceHandler deleteServiceHandler;
     private final AdminInputHandler adminInputHandler;
     private final Cache<BotUser> cache;
 
-    public ManageServiceHandler(Database database, MessageSender messageSender, EditServiceHandler editServiceHandler, AdminInputHandler adminInputHandler, Cache<BotUser> cache) {
+    public ManageServiceHandler(Database database, MessageSender messageSender, EditServiceHandler editServiceHandler, AdminInputHandler adminInputHandler, Cache<BotUser> cache, DeleteServiceHandler deleteServiceHandler) {
         this.database = database;
         this.messageSender = messageSender;
         this.editServiceHandler = editServiceHandler;
         this.adminInputHandler = adminInputHandler;
+        this.deleteServiceHandler = deleteServiceHandler;
         this.cache = cache;
     }
 
@@ -31,10 +33,7 @@ public class ManageServiceHandler {
         BotUser botUser = cache.findBy(message.getChatId());
         switch (botUser.getManageStatus()){
             case EDITING -> editServiceHandler.generalHandler(message);
-            case DELETING -> {
-                return;
-            }
-            case ADDING -> adminInputHandler.choose(message);
+            case DELETING -> deleteServiceHandler.generalHandler(message);
             case NONE -> chooseStatus(message);
         }
     }
@@ -48,7 +47,7 @@ public class ManageServiceHandler {
 
                 editServiceHandler.generalHandler(message);
             }
-/*            case "Список послуг" ->{
+            case "Список послуг" ->{
                 botUser.setManageStatus(ManageStatus.REVIEW);
 
                 try {
@@ -56,13 +55,20 @@ public class ManageServiceHandler {
                 }
                 catch (Exception exc){
                     UserInputHandler.mainMenuMessage(messageSender, message);
-                    botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
                     return;
                 }
-            }*/
+                botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
+                UserInputHandler.mainMenuMessage(messageSender, message);
+            }
+            case "Видалити послугу" -> {
+                botUser.setManageStatus(ManageStatus.DELETING);
+                botUser.setDeleteServiceStatus(DeleteServiceStatus.NONE);
+                deleteServiceHandler.generalHandler(message);
+            }
+
         }
     }
-/*    private void outServicesList(Message message) throws Exception {
+   private void outServicesList(Message message) throws Exception {
         BotUser botUser = cache.findBy(message.getChatId());
         Vector<Service> servicesList = database.getTotalServices();
         String MessageBody= "";
@@ -72,8 +78,6 @@ public class ManageServiceHandler {
             for (int i = 0; i < servicesList.size(); i++) {
                 MessageBody  = MessageBody.concat((i + 1) + ". " + servicesList.get(i).outString());
             }
-*//*            System.out.println(MessageBody);
-            System.out.println(servicesList.size());*//*
         }
         else{
             messageSender.sendMessage(SendMessage.builder()
@@ -88,5 +92,5 @@ public class ManageServiceHandler {
                 .text(MessageBody)
                 .chatId(String.valueOf(botUser.getTelegramID()))
                 .build());
-    }*/
+    }
 }

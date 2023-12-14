@@ -63,13 +63,13 @@ public class Service {
     }
     public String outString(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        String sEndTime = endDate.format(formatter); // "12:30"
-        String sStartTime = startDate.format(formatter); // "12:30"
+        String sEndTime = endDate.format(formatter);
+        String sStartTime = startDate.format(formatter);
 
         String performers = "Виконавці:"+ '\n';
 
         for (Worker worker : workers) {
-            performers = performers.concat( "\t- " + worker.outString() + '\n');
+            performers = performers.concat( "\t- " +worker.surname +' '+ worker.name  + '\n');
 
         }
 

@@ -53,6 +53,7 @@ public class ServiceInputHandler {
 
     //функція початку послуги з попереднім вибором категорії та робітника
     private void chooseCategory(Message message, BotUser botUser){
+        serviceHashMap.replace(botUser, new Service());
         switch (message.getText()){
             case "Мийка кузова" -> serviceHashMap.get(botUser).setServiceType(ServiceType.BODYWASH);
             case "Мийка кузова і салону" -> serviceHashMap.get(botUser).setServiceType(ServiceType.INTERIORBODYWASH);

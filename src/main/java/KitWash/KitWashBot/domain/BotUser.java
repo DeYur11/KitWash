@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class BotUser {
     GeneralStatus generalStatus;
     InputStatus inputStatus;
-
+    DeleteServiceStatus deleteServiceStatus;
     DeleteWorkerStatus deleteWorkerStatus;
     WorkStatus workStatus;
     WorkerEditStatus workerEditStatus;
@@ -27,6 +27,15 @@ public class BotUser {
         this.generalStatus = generalStatus;
     }
     public BotUser(){}
+
+
+    public DeleteServiceStatus getDeleteServiceStatus() {
+        return deleteServiceStatus;
+    }
+
+    public void setDeleteServiceStatus(DeleteServiceStatus deleteServiceStatus) {
+        this.deleteServiceStatus = deleteServiceStatus;
+    }
 
     public DeleteWorkerStatus getDeleteWorkerStatus() {
         return deleteWorkerStatus;
