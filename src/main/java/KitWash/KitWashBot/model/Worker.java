@@ -58,7 +58,7 @@ public class Worker {
     //перетворення інформації про робітника у String
     @Override
     public String toString() {
-        return surname + ' ' + name  + " Телеграм ID: " + telegramId;
+        return surname + ' ' + name  + " Телеграм ID: " + telegramId + '\n';
     }
     public String outString(){
         double salary = 0.0F;
