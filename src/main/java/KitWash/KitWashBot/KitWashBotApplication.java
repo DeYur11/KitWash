@@ -7,6 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class KitWashBotApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(KitWashBotApplication.class, args);
-		System.out.println("Anton");
+		System.out.println("Bot started");
 	}
 }

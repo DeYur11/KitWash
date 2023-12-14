@@ -37,4 +37,10 @@ public class UserCache implements Cache<BotUser> {
     public List<BotUser> getAll() {
         return new ArrayList<>(users.values());
     }
+    public void replaceBotUser(BotUser oldUser, BotUser newUser){
+        System.out.println(oldUser.getTelegramID());
+        System.out.println(newUser.getTelegramID());
+        users.remove(oldUser.getTelegramID());
+        users.put(newUser.getTelegramID(), newUser);
+    }
 }

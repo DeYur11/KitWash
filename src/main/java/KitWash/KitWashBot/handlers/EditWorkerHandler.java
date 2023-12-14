@@ -174,7 +174,13 @@ public class EditWorkerHandler {
 
         Integer integer = database.getWorkers().indexOf(botUser.getWorker());
 
+        BotUser toChange = cache.findBy(database.getWorkers().get(integer).getTelegramId());
+        BotUser newUser = new BotUser(newTelegramId, toChange.getGeneralStatus());
+
+        cache.replaceBotUser(toChange, newUser);
         database.getWorkers().get(integer).setTelegramId(newTelegramId);
+
+
         botUser.setGeneralStatus(GeneralStatus.HOME_PAGE);
         UserInputHandler.mainMenuMessage(messageSender, message);
     }

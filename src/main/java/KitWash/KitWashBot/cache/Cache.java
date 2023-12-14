@@ -1,5 +1,7 @@
 package KitWash.KitWashBot.cache;
 
+import KitWash.KitWashBot.domain.BotUser;
+
 import java.util.List;
 
 public interface Cache<T> {
@@ -10,4 +12,5 @@ public interface Cache<T> {
     T findBy(Long id);
 
     List<T> getAll();
+    public void replaceBotUser(BotUser oldUser, BotUser newUser);
 }
