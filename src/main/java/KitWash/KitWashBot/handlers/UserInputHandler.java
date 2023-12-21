@@ -91,8 +91,8 @@ public class UserInputHandler {
             }
         }else if (message.hasText()){
             var sendMessage = SendMessage.builder()
-                    .text("Please wait for administrator to add you.\n" +
-                            "Your telegram ID: " + message.getChatId())
+                    .text("Зачекайте поки адміністратор додасть вас.\n" +
+                            "Ваш telegram-ID: " + message.getChatId())
 
                     .chatId(String.valueOf(message.getChatId()))
                     .build();
